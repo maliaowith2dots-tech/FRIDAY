@@ -10,12 +10,11 @@
   :root{
     --fg:#202124;
     --muted:#6b7280;
-    --line:rgba(255,255,255,.25);
-    --btn:#eef1f6;
-    --btnText:#3b3f46;
+    --line:rgba(255,255,255,.18);
     --card:#ffffffcc;
+    --btn:#eef1f6; --btnText:#3b3f46;
     --radius:16px;
-    --shadow:0 20px 60px rgba(0,0,0,.25);
+    --shadow:0 18px 50px rgba(0,0,0,.22);
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);}
@@ -23,23 +22,24 @@
   /* === BACKGROUND with blurred cover === */
   body::before{
     content:"";
-    position:fixed;
-    inset:0;
+    position:fixed; inset:0;
     background:
-      linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.6)),
+      linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.62)),
       url("https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png") center/cover no-repeat;
-    filter:blur(30px) brightness(0.8);
-    z-index:-1;
-    transform:scale(1.1);
+    filter:blur(28px) brightness(0.85);
+    z-index:-1; transform:scale(1.08);
   }
 
-  .wrap{max-width:560px;margin:0 auto;padding:20px;backdrop-filter:blur(5px);}
+  .wrap{max-width:560px;margin:0 auto;padding:18px 18px 24px;backdrop-filter:blur(5px);}
+
+  /* Video */
   .video{
-    margin:18px 0;border-radius:18px;overflow:hidden;
-    box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.1);
+    margin:16px 0 14px; border-radius:18px; overflow:hidden;
+    box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.10);
   }
-  .video iframe{width:100%;aspect-ratio:16/9;border:0;display:block;}
+  .video iframe{width:100%; aspect-ratio:16/9; border:0; display:block;}
 
+  /* Card */
   .card{
     background:var(--card);
     border-radius:20px;
@@ -48,36 +48,64 @@
     box-shadow:var(--shadow);
     overflow:hidden;
   }
-  .card-header{text-align:center;padding:22px;}
-  .cover{
-    width:160px;height:160px;border-radius:12px;overflow:hidden;
-    margin:0 auto 14px;box-shadow:0 8px 24px rgba(0,0,0,.25);
-  }
-  .cover img{width:100%;height:100%;object-fit:cover;}
-  .title{font-weight:800;font-size:18px;margin:4px 0 2px;color:#fff;}
-  .subtitle{font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:#ddd;}
-  .hint{color:var(--muted);font-size:13px;margin-top:8px;}
+  .card-header{text-align:center;padding:20px 20px 14px;}
 
-  .list{padding:10px 12px 14px;}
+  /* Pochette cliquable */
+  .cover-btn{
+    display:inline-grid; place-items:center;
+    width:168px; height:168px; border-radius:14px; overflow:hidden;
+    margin:0 auto 12px; border:0; background:transparent; cursor:zoom-in;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  .cover-btn img{width:100%; height:100%; object-fit:cover; display:block;}
+
+  .title{font-weight:800; font-size:18px; margin:2px 0 0; color:#fff;}
+  .subtitle{font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#e9e9e9; opacity:.95; margin-top:2px;}
+  .hint{color:#eaeaea; font-size:12.5px; margin:8px 0 2px; opacity:.8}
+
+  /* List */
+  .list{padding:10px 12px 14px}
   .row{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:14px;padding:12px 12px;border-radius:12px;
-    border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.9);
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; padding:12px 12px; border-radius:12px;
+    border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.94);
     transition:transform .08s ease, background .12s ease;
     margin:10px 0;
   }
-  .row:hover{transform:translateY(-1px);background:rgba(255,255,255,1);}
-  .left{display:flex;align-items:center;gap:12px;}
-  .logo{width:28px;height:28px;object-fit:contain;}
-  .name{font-weight:700;font-size:15px;color:#1f2328;}
+  .row:hover{transform:translateY(-1px); background:#fff}
+  .left{display:flex; align-items:center; gap:12px}
+  .logo{width:28px; height:28px; object-fit:contain}
+  .name{font-weight:700; font-size:15px; color:#1f2328}
   .cta{
-    appearance:none;border:0;background:var(--btn);color:var(--btnText);
-    padding:8px 14px;border-radius:10px;font-weight:700;font-size:13px;
-    letter-spacing:.02em;cursor:pointer;
+    appearance:none; border:0; background:var(--btn); color:var(--btnText);
+    padding:8px 14px; border-radius:10px; font-weight:700; font-size:13px; letter-spacing:.02em; cursor:pointer;
   }
-  .cta:hover{filter:brightness(0.95);}
-  .brand{text-align:center;margin-top:20px;color:#ddd;font-size:14px;font-weight:600;}
+  .cta:hover{filter:brightness(0.96)}
+
+  .brand{text-align:center; margin-top:18px; color:#ddd; font-size:14px; font-weight:600}
+
+  /* === Lightbox (agrandissement pochette) === */
+  .lightbox{
+    position:fixed; inset:0; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,.68); backdrop-filter:blur(3px);
+    z-index:50;
+  }
+  .lightbox.open{display:flex}
+  .lightbox img{
+    max-width:92vw; max-height:92vh; border-radius:16px;
+    box-shadow:0 30px 100px rgba(0,0,0,.6);
+    transform:scale(.96); opacity:0; transition:transform .18s ease, opacity .18s ease;
+  }
+  .lightbox.open img{transform:scale(1); opacity:1}
+  .lightbox .close{
+    position:absolute; top:16px; right:16px;
+    background:rgba(255,255,255,.9); color:#111; border:1px solid #e5e5e5;
+    border-radius:999px; padding:8px 10px; font-weight:700; cursor:pointer;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .row, .lightbox img{transition:none}
+  }
 </style>
 </head>
 <body>
@@ -94,63 +122,98 @@
     <!-- CARD -->
     <section class="card" aria-label="Choisir un service musical">
       <div class="card-header">
-        <div class="cover"><img src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png" alt="Pochette du single"></div>
+        <!-- Pochette cliquable -->
+        <button class="cover-btn" id="openCover" aria-label="Agrandir la pochette" title="Agrandir">
+          <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png" alt="Pochette du single" loading="lazy">
+        </button>
+
         <div class="title">Malïao</div>
         <div class="subtitle">NEW SINGLE</div>
         <div class="hint">Choose music service</div>
       </div>
 
       <div class="list">
-        <a class="row" href="https://bit.ly/maliao_youtubemusic" target="_blank">
+        <a class="row" href="https://bit.ly/maliao_youtubemusic" target="_blank" rel="noopener">
           <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Youtubemusic.png" alt="">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Youtubemusic.png" alt="" loading="lazy">
             <div class="name">YouTube Music</div>
-          </div><button class="cta">Listen</button>
+          </div><button class="cta" type="button">Listen</button>
         </a>
-        <a class="row" href="https://bit.ly/maliao_spotify" target="_blank">
+
+        <a class="row" href="https://bit.ly/maliao_spotify" target="_blank" rel="noopener">
           <div class="left">
-            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="">
+            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="" loading="lazy">
             <div class="name">Spotify</div>
-          </div><button class="cta">Listen</button>
+          </div><button class="cta" type="button">Listen</button>
         </a>
-        <a class="row" href="https://bit.ly/maliao_apple" target="_blank">
+
+        <a class="row" href="https://bit.ly/maliao_apple" target="_blank" rel="noopener">
           <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Apple.jpeg" alt="">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Apple.jpeg" alt="" loading="lazy">
             <div class="name">Apple Music</div>
-          </div><button class="cta">Listen</button>
+          </div><button class="cta" type="button">Listen</button>
         </a>
-        
-        <a class="row" href="https://bit.ly/maliao_deezer" target="_blank">
+
+        <a class="row" href="https://bit.ly/maliao_deezer" target="_blank" rel="noopener">
           <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Deezer.jpeg" alt="">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Deezer.jpeg" alt="" loading="lazy">
             <div class="name">Deezer</div>
-          </div><button class="cta">Listen</button>
+          </div><button class="cta" type="button">Listen</button>
         </a>
-        <a class="row" href="https://bit.ly/maliao_tidal" target="_blank">
+
+        <a class="row" href="https://bit.ly/maliao_tidal" target="_blank" rel="noopener">
           <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Tidal.png" alt="">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Tidal.png" alt="" loading="lazy">
             <div class="name">TIDAL</div>
-          </div><button class="cta">Listen</button>
+          </div><button class="cta" type="button">Listen</button>
         </a>
-        <a class="row" href="https://bit.ly/maliao_amazon" target="_blank">
+
+        <a class="row" href="https://bit.ly/maliao_amazon" target="_blank" rel="noopener">
           <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/ama.png" alt="">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/ama.png" alt="" loading="lazy">
             <div class="name">Amazon Music</div>
-          </div><button class="cta">Listen</button>
+          </div><button class="cta" type="button">Listen</button>
         </a>
-        
-        
       </div>
     </section>
 
     <div class="brand">© <span id="y"></span> Malïao</div>
   </main>
 
-<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Pochette agrandie">
+    <button class="close" id="closeLb" aria-label="Fermer (Esc)">×</button>
+    <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png" alt="Pochette du single agrandie">
+  </div>
+
+<script>
+  // Année auto
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Lightbox logique
+  const openBtn = document.getElementById('openCover');
+  const lb = document.getElementById('lightbox');
+  const closeBtn = document.getElementById('closeLb');
+
+  function openLightbox(){
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden'; // évite le scroll derrière
+    // focus sur le bouton close pour accessibilité
+    setTimeout(()=>closeBtn.focus(), 0);
+  }
+  function closeLightbox(){
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    openBtn.focus();
+  }
+
+  openBtn.addEventListener('click', openLightbox);
+  closeBtn.addEventListener('click', closeLightbox);
+  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); }); // clic en dehors ferme
+
+  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
+</script>
 </body>
 </html>
-
-
-
-
-
