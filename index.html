@@ -11,10 +11,12 @@
     --fg:#202124;
     --muted:#6b7280;
     --line:rgba(255,255,255,.18);
-    --card:#ffffffcc;
+    /* Gradient chaud + transparent (remplace l'ancien --card) */
+    --card: linear-gradient(180deg, rgba(34,27,20,0.75) 0%, rgba(18,15,12,0.62) 100%);
     --btn:#eef1f6; --btnText:#3b3f46;
     --radius:16px;
     --shadow:0 18px 50px rgba(0,0,0,.22);
+    --accent:#ffe27a;
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);}
@@ -39,14 +41,100 @@
   }
   .video iframe{width:100%; aspect-ratio:16/9; border:0; display:block;}
 
+  /* === Newsletter trigger button (under video) === */
+  .newsletter-btn{
+    position:relative;
+    display:block; margin:18px auto 18px; padding:12px 22px;
+    background:var(--accent); color:#000; font-weight:800;
+    border:0; border-radius:999px; cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,.15);
+    transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    animation:floaty 3s ease-in-out infinite;
+  }
+  .newsletter-btn:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    filter:brightness(0.98);
+  }
+  .newsletter-btn::after{
+    content:"";
+    position:absolute; inset:-6px;
+    border-radius:999px;
+    border:2px solid rgba(255,226,122,.65);
+    animation:pulseRing 2.6s ease-out infinite;
+    pointer-events:none;
+  }
+  @keyframes floaty{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-4px)}
+  }
+  @keyframes pulseRing{
+    0%{opacity:.55; transform:scale(1)}
+    70%{opacity:0; transform:scale(1.22)}
+    100%{opacity:0; transform:scale(1.22)}
+  }
+
+  /* === Modal + animations === */
+  .newsletter-modal{
+    position:fixed; inset:0; background:rgba(0,0,0,.65);
+    display:none; align-items:center; justify-content:center;
+    backdrop-filter:blur(6px); z-index:100;
+    animation:fadeBg .3s ease forwards;
+  }
+  .newsletter-modal.open{display:flex;}
+  @keyframes fadeBg{from{opacity:0;} to{opacity:1;}}
+
+  .newsletter-box{
+    background:#fff; color:#111; text-align:center;
+    border-radius:24px; padding:36px 28px; width:90%; max-width:400px;
+    box-shadow:0 20px 80px rgba(0,0,0,.4); position:relative;
+    animation:popIn .35s cubic-bezier(.25,.46,.45,.94);
+  }
+  @keyframes popIn{
+    0%{transform:translateY(40px) scale(0.96); opacity:0;}
+    100%{transform:translateY(0) scale(1); opacity:1;}
+  }
+
+  .fade-in{opacity:0; animation:fadeText .6s ease .2s forwards;}
+  .fade-in-delay{opacity:0; animation:fadeText .8s ease .4s forwards;}
+  @keyframes fadeText{
+    from{opacity:0; transform:translateY(6px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .newsletter-box h2{margin:0 0 8px;font-weight:900;font-size:22px;}
+  .newsletter-box p{margin:0 0 18px;color:#444; font-size:14.5px;}
+  .newsletter-box form{display:flex;flex-direction:column;gap:10px;}
+  .newsletter-box input[type="email"]{
+    padding:12px 14px; border-radius:999px; border:1px solid #ccc;
+    font-size:14px; outline:none;
+  }
+  .newsletter-box button[type="submit"]{
+    padding:12px 18px; border:0; border-radius:999px;
+    background:var(--accent); font-weight:800; cursor:pointer;
+    transition:transform .2s ease;
+  }
+  .newsletter-box button[type="submit"]:hover{transform:scale(1.03);}
+  .newsletter-box .thank{display:none;margin-top:14px;font-weight:700;}
+  .newsletter-box.sent form{display:none;}
+  .newsletter-box.sent .thank{display:block;}
+  .close-modal{
+    position:absolute;top:10px;right:14px;border:0;background:none;
+    font-size:24px;cursor:pointer;color:#555;
+    transition:transform .2s ease;
+  }
+  .close-modal:hover{transform:scale(1.2);}
+
   /* Card */
   .card{
     background:var(--card);
-    border-radius:20px;
-    backdrop-filter:blur(10px);
-    border:1px solid var(--line);
-    box-shadow:var(--shadow);
-    overflow:hidden;
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  border:1px solid var(--line);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow:hidden;
   }
   .card-header{text-align:center;padding:20px 20px 14px;}
 
@@ -63,28 +151,40 @@
   .subtitle{font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#e9e9e9; opacity:.95; margin-top:2px;}
   .hint{color:#eaeaea; font-size:12.5px; margin:8px 0 2px; opacity:.8}
 
-  /* List */
-  .list{padding:10px 12px 14px}
-  .row{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:14px; padding:12px 12px; border-radius:12px;
-    border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.94);
-    transition:transform .08s ease, background .12s ease;
-    margin:10px 0;
+  /* === Platforms — pill grid layout (clean like the loop button) === */
+  .services{
+    display:grid; gap:10px; padding:12px;
+    grid-template-columns:1fr;
   }
-  .row:hover{transform:translateY(-1px); background:#fff}
-  .left{display:flex; align-items:center; gap:12px}
-  .logo{width:28px; height:28px; object-fit:contain}
-  .name{font-weight:700; font-size:15px; color:#1f2328}
-  .cta{
-    appearance:none; border:0; background:var(--btn); color:var(--btnText);
-    padding:8px 14px; border-radius:10px; font-weight:700; font-size:13px; letter-spacing:.02em; cursor:pointer;
+  @media(min-width:540px){
+    .services{grid-template-columns:1fr 1fr;}
   }
-  .cta:hover{filter:brightness(0.96)}
+  .svc{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 14px; border-radius:999px;
+    /* un peu plus blanc pour contraster sur l'orange */
+    background:rgba(255,255,255,.96);
+    border:1px solid rgba(0,0,0,.06);
+    text-decoration:none;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .svc:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 24px rgba(0,0,0,.10);
+    background:#fff;
+  }
+  .svc .logo{width:26px;height:26px;object-fit:contain;flex:0 0 26px}
+  .svc .name{font-weight:800;color:#111;letter-spacing:.01em}
+  .svc .go{
+    margin-left:auto; font-weight:800; font-size:12px;
+    background:var(--btn); color:var(--btnText);
+    padding:8px 12px; border-radius:999px; border:0;
+  }
 
   .brand{text-align:center; margin-top:18px; color:#ddd; font-size:14px; font-weight:600}
 
-  /* === Lightbox (agrandissement pochette) === */
+  /* === Lightbox (image + text side-by-side) === */
   .lightbox{
     position:fixed; inset:0; display:none;
     align-items:center; justify-content:center;
@@ -92,19 +192,55 @@
     z-index:50;
   }
   .lightbox.open{display:flex}
-  .lightbox img{
-    max-width:92vw; max-height:92vh; border-radius:16px;
+
+  .lb-content{
+    position:relative;
+    display:flex; gap:18px;
+    width:min(960px,92vw); max-height:92vh;
+    background:rgba(20,22,25,.92);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
     box-shadow:0 30px 100px rgba(0,0,0,.6);
-    transform:scale(.96); opacity:0; transition:transform .18s ease, opacity .18s ease;
+    padding:16px;
+    color:#fff;
   }
-  .lightbox.open img{transform:scale(1); opacity:1}
+  .lb-img{
+    flex:1 1 55%;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; border-radius:14px;
+    background:rgba(255,255,255,.04);
+  }
+  .lb-img img{
+    width:100%; height:auto; max-height:calc(92vh - 56px);
+    object-fit:contain; border-radius:12px;
+  }
+  .lb-text{
+    flex:1 1 45%;
+    display:flex; flex-direction:column;
+    min-width:0; padding:6px 6px 6px 2px; overflow:auto;
+  }
+  .lb-text h3{
+    margin:0 0 8px; font-size:20px; font-weight:900; letter-spacing:.02em;
+  }
+  .lb-text p{
+    margin:0 0 10px; line-height:1.55; color:#e7e7e7; font-size:14.5px;
+  }
+  .lb-text .meta{
+    margin-top:auto; opacity:.85; font-size:12.5px; color:#cfcfcf;
+    border-top:1px solid rgba(255,255,255,.08); padding-top:10px;
+  }
   .lightbox .close{
-    position:absolute; top:16px; right:16px;
-    background:rgba(255,255,255,.9); color:#111; border:1px solid #e5e5e5;
+    position:absolute; top:12px; right:12px;
+    background:rgba(255,255,255,.92); color:#111; border:1px solid #e5e5e5;
     border-radius:999px; padding:8px 10px; font-weight:700; cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
+  }
+  @media (max-width: 720px){
+    .lb-content{flex-direction:column; gap:12px; padding:14px;}
+    .lb-img img{max-height:50vh;}
   }
   @media (prefers-reduced-motion: reduce){
-    .row, .lightbox img{transition:none}
+    .row, .newsletter-btn{transition:none; animation:none}
   }
 </style>
 </head>
@@ -119,6 +255,31 @@
         allowfullscreen></iframe>
     </section>
 
+    <!-- === Newsletter trigger placed right under the video === -->
+    <button id="openNewsletter" class="newsletter-btn" aria-label="Open newsletter signup">
+      Stay in the loop
+    </button>
+
+    <!-- === Floating Modal === -->
+    <div class="newsletter-modal" id="newsletterModal" aria-hidden="true" role="dialog">
+      <div class="newsletter-box">
+        <button class="close-modal" id="closeNewsletter" aria-label="Close">×</button>
+        <h2 class="fade-in">Stay in the loop 💛</h2>
+        <p class="fade-in-delay">I’ll email you when new stuff drops.</p>
+
+        <form id="mailForm"
+          action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfY-uGloqACsaDQ4FrtxFkbmlqpo6cumsQ4nCwrQ1dUEt6Xsw/formResponse"
+          method="POST">
+          <!-- Make sure entry.* matches your Google Forms field -->
+          <input type="email" name="entry.649502797" placeholder="Your email" required>
+          <button type="submit">Join the list</button>
+        </form>
+
+        <div class="thank" aria-live="polite">Thank you! You’re on the list 💛</div>
+      </div>
+    </div>
+    <!-- === End Modal === -->
+
     <!-- CARD -->
     <section class="card" aria-label="Choisir un service musical">
       <div class="card-header">
@@ -132,58 +293,78 @@
         <div class="hint">Choose music service</div>
       </div>
 
-      <div class="list">
-        <a class="row" href="https://bit.ly/maliao_youtubemusic" target="_blank" rel="noopener">
-          <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Youtubemusic.png" alt="" loading="lazy">
-            <div class="name">YouTube Music</div>
-          </div><button class="cta" type="button">Listen</button>
+      <!-- Redesigned services grid -->
+      <div class="services" aria-label="Services">
+        <a class="svc" href="https://bit.ly/maliao_youtubemusic" target="_blank" rel="noopener">
+          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Youtubemusic.png" alt="">
+          <div class="name">YouTube Music</div>
+          <span class="go">Listen</span>
         </a>
 
-        <a class="row" href="https://bit.ly/maliao_spotify" target="_blank" rel="noopener">
-          <div class="left">
-            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="" loading="lazy">
-            <div class="name">Spotify</div>
-          </div><button class="cta" type="button">Listen</button>
+        <a class="svc" href="https://bit.ly/maliao_spotify" target="_blank" rel="noopener">
+          <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="">
+          <div class="name">Spotify</div>
+          <span class="go">Listen</span>
         </a>
 
-        <a class="row" href="https://bit.ly/maliao_apple" target="_blank" rel="noopener">
-          <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Apple.jpeg" alt="" loading="lazy">
-            <div class="name">Apple Music</div>
-          </div><button class="cta" type="button">Listen</button>
+        <a class="svc" href="https://bit.ly/maliao_apple" target="_blank" rel="noopener">
+          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Apple.jpeg" alt="">
+          <div class="name">Apple Music</div>
+          <span class="go">Listen</span>
         </a>
 
-        <a class="row" href="https://bit.ly/maliao_deezer" target="_blank" rel="noopener">
-          <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Deezer.jpeg" alt="" loading="lazy">
-            <div class="name">Deezer</div>
-          </div><button class="cta" type="button">Listen</button>
+        <a class="svc" href="https://bit.ly/maliao_deezer" target="_blank" rel="noopener">
+          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Deezer.jpeg" alt="">
+          <div class="name">Deezer</div>
+          <span class="go">Listen</span>
         </a>
 
-        <a class="row" href="https://bit.ly/maliao_tidal" target="_blank" rel="noopener">
-          <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Tidal.png" alt="" loading="lazy">
-            <div class="name">TIDAL</div>
-          </div><button class="cta" type="button">Listen</button>
+        <a class="svc" href="https://bit.ly/maliao_tidal" target="_blank" rel="noopener">
+          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Tidal.png" alt="">
+          <div class="name">TIDAL</div>
+          <span class="go">Listen</span>
         </a>
 
-        <a class="row" href="https://bit.ly/maliao_amazon" target="_blank" rel="noopener">
-          <div class="left">
-            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/ama.png" alt="" loading="lazy">
-            <div class="name">Amazon Music</div>
-          </div><button class="cta" type="button">Listen</button>
+        <a class="svc" href="https://bit.ly/maliao_amazon" target="_blank" rel="noopener">
+          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/ama.png" alt="">
+          <div class="name">Amazon Music</div>
+          <span class="go">Listen</span>
         </a>
       </div>
     </section>
 
-    <div class="brand">© <span id="y"></span> Malïao</div>
+    <div class="brand">© <span id="y"></span> MALÏAO & HOMEMAD. PROD</div>
   </main>
 
-  <!-- Lightbox -->
+  <!-- Lightbox (side-by-side cover + text) -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Pochette agrandie">
-    <button class="close" id="closeLb" aria-label="Fermer (Esc)">×</button>
-    <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png" alt="Pochette du single agrandie">
+    <div class="lb-content" role="document">
+      <button class="close" id="closeLb" aria-label="Fermer (Esc)">×</button>
+
+      <!-- LEFT: Album cover -->
+      <div class="lb-img">
+        <img
+          src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png"
+          alt="Pochette du single agrandie">
+      </div>
+
+      <!-- RIGHT: Album text -->
+      <aside class="lb-text">
+        <h3>About the album</h3>
+        <p>
+          <strong>FRIDAY</strong> is Malïao in motion — alt-R&B edges, crooked-smile rap,
+          dusty drums and widescreen color. It’s the moment right after the fall:
+          lighter, sharper, and somehow more dangerous.
+        </p>
+        <p>
+          Live strings, MPC scars, and late-night city air. If you’ve ever felt
+          too awake at 3am, this is for you.
+        </p>
+        <div class="meta">
+          Written by Malïao & produced by HOMEMAD. PROD · Recorded between Beijing & Paris · 2025
+        </div>
+      </aside>
+    </div>
   </div>
 
 <script>
@@ -198,8 +379,7 @@
   function openLightbox(){
     lb.classList.add('open');
     lb.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden'; // évite le scroll derrière
-    // focus sur le bouton close pour accessibilité
+    document.body.style.overflow = 'hidden';
     setTimeout(()=>closeBtn.focus(), 0);
   }
   function closeLightbox(){
@@ -208,12 +388,45 @@
     document.body.style.overflow = '';
     openBtn.focus();
   }
-
   openBtn.addEventListener('click', openLightbox);
   closeBtn.addEventListener('click', closeLightbox);
-  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); }); // clic en dehors ferme
-
+  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
   window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
+
+  // === Newsletter modal logic ===
+  const modal=document.getElementById("newsletterModal");
+  const openNewsletter=document.getElementById("openNewsletter");
+  const closeNewsletter=document.getElementById("closeNewsletter");
+
+  openNewsletter.addEventListener("click",()=>{ 
+    modal.classList.add("open"); 
+    modal.setAttribute("aria-hidden","false"); 
+  });
+  closeNewsletter.addEventListener("click",()=>{ 
+    modal.classList.remove("open"); 
+    modal.setAttribute("aria-hidden","true"); 
+  });
+  modal.addEventListener("click",e=>{ 
+    if(e.target===modal) { 
+      modal.classList.remove("open"); 
+      modal.setAttribute("aria-hidden","true");
+    }
+  });
+
+  // === Email submit (Google Forms, no page change) ===
+  const form=document.getElementById("mailForm");
+  const box=document.querySelector(".newsletter-box");
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();
+    const data=new FormData(form);
+    try{
+      await fetch(form.action,{method:"POST",body:data,mode:"no-cors"});
+      box.classList.add("sent");
+    }catch(err){
+      box.classList.add("sent");
+      box.querySelector(".thank").textContent="Error — try again later.";
+    }
+  });
 </script>
 </body>
 </html>
