@@ -3,437 +3,413 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Malïao — New Single</title>
+<title>Malïao</title>
 <meta name="description" content="Watch the clip and choose your music service to listen to Malïao's new single.">
+
+<!-- CONFIG -->
+<script>
+  const RELEASE_DATE = "2025-11-07T00:00:00+01:00"; // local drop time
+  const YT_ID = "9coxeNKwFvw";                      // YouTube ID
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6VWXFRJZR0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6VWXFRJZR0');
+</script>
 
 <style>
   :root{
-    --fg:#202124;
-    --muted:#6b7280;
-    --line:rgba(255,255,255,.18);
-    /* Gradient chaud + transparent (remplace l'ancien --card) */
+    --fg:#202124; --muted:#6b7280; --line:rgba(255,255,255,.18);
     --card: linear-gradient(180deg, rgba(34,27,20,0.75) 0%, rgba(18,15,12,0.62) 100%);
-    --btn:#eef1f6; --btnText:#3b3f46;
-    --radius:16px;
-    --shadow:0 18px 50px rgba(0,0,0,.22);
+    --btn:#eef1f6; --btnText:#3b3f46; --shadow:0 18px 50px rgba(0,0,0,.22);
     --accent:#ffe27a;
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);}
-
-  /* === BACKGROUND with blurred cover === */
   body::before{
-    content:"";
-    position:fixed; inset:0;
-    background:
-      linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.62)),
+    content:""; position:fixed; inset:0;
+    background:linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.62)),
       url("https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png") center/cover no-repeat;
-    filter:blur(28px) brightness(0.85);
-    z-index:-1; transform:scale(1.08);
+    filter:blur(28px) brightness(0.85); z-index:-1; transform:scale(1.08);
   }
-
   .wrap{max-width:560px;margin:0 auto;padding:18px 18px 24px;backdrop-filter:blur(5px);}
 
-  /* Video */
-  .video{
-    margin:16px 0 14px; border-radius:18px; overflow:hidden;
-    box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.10);
-  }
-  .video iframe{width:100%; aspect-ratio:16/9; border:0; display:block;}
-
-  /* === Newsletter trigger button (under video) === */
-  .newsletter-btn{
-    position:relative;
-    display:block; margin:18px auto 18px; padding:12px 22px;
-    background:var(--accent); color:#000; font-weight:800;
-    border:0; border-radius:999px; cursor:pointer;
-    box-shadow:0 6px 20px rgba(0,0,0,.15);
-    transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
-    animation:floaty 3s ease-in-out infinite;
-  }
-  .newsletter-btn:hover{
-    transform:translateY(-2px) scale(1.03);
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
-    filter:brightness(0.98);
-  }
-  .newsletter-btn::after{
-    content:"";
-    position:absolute; inset:-6px;
-    border-radius:999px;
-    border:2px solid rgba(255,226,122,.65);
-    animation:pulseRing 2.6s ease-out infinite;
-    pointer-events:none;
-  }
-  @keyframes floaty{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-4px)}
-  }
-  @keyframes pulseRing{
-    0%{opacity:.55; transform:scale(1)}
-    70%{opacity:0; transform:scale(1.22)}
-    100%{opacity:0; transform:scale(1.22)}
-  }
-
-  /* === Modal + animations === */
-  .newsletter-modal{
-    position:fixed; inset:0; background:rgba(0,0,0,.65);
-    display:none; align-items:center; justify-content:center;
-    backdrop-filter:blur(6px); z-index:100;
-    animation:fadeBg .3s ease forwards;
-  }
-  .newsletter-modal.open{display:flex;}
-  @keyframes fadeBg{from{opacity:0;} to{opacity:1;}}
-
-  .newsletter-box{
-    background:#fff; color:#111; text-align:center;
-    border-radius:24px; padding:36px 28px; width:90%; max-width:400px;
-    box-shadow:0 20px 80px rgba(0,0,0,.4); position:relative;
-    animation:popIn .35s cubic-bezier(.25,.46,.45,.94);
-  }
-  @keyframes popIn{
-    0%{transform:translateY(40px) scale(0.96); opacity:0;}
-    100%{transform:translateY(0) scale(1); opacity:1;}
-  }
-
-  .fade-in{opacity:0; animation:fadeText .6s ease .2s forwards;}
-  .fade-in-delay{opacity:0; animation:fadeText .8s ease .4s forwards;}
-  @keyframes fadeText{
-    from{opacity:0; transform:translateY(6px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-
-  .newsletter-box h2{margin:0 0 8px;font-weight:900;font-size:22px;}
-  .newsletter-box p{margin:0 0 18px;color:#444; font-size:14.5px;}
-  .newsletter-box form{display:flex;flex-direction:column;gap:10px;}
-  .newsletter-box input[type="email"]{
-    padding:12px 14px; border-radius:999px; border:1px solid #ccc;
-    font-size:14px; outline:none;
-  }
-  .newsletter-box button[type="submit"]{
-    padding:12px 18px; border:0; border-radius:999px;
-    background:var(--accent); font-weight:800; cursor:pointer;
-    transition:transform .2s ease;
-  }
-  .newsletter-box button[type="submit"]:hover{transform:scale(1.03);}
-  .newsletter-box .thank{display:none;margin-top:14px;font-weight:700;}
-  .newsletter-box.sent form{display:none;}
-  .newsletter-box.sent .thank{display:block;}
-  .close-modal{
-    position:absolute;top:10px;right:14px;border:0;background:none;
-    font-size:24px;cursor:pointer;color:#555;
-    transition:transform .2s ease;
-  }
-  .close-modal:hover{transform:scale(1.2);}
-
-  /* Card */
-  .card{
-    background:var(--card);
-  border-radius:20px;
-  backdrop-filter:blur(10px);
-  border:1px solid var(--line);
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-  overflow:hidden;
-  }
+  /* Card shell */
+  .card{background:var(--card); border-radius:20px; backdrop-filter:blur(10px);
+        border:1px solid var(--line); box-shadow:0 8px 20px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden;}
   .card-header{text-align:center;padding:20px 20px 14px;}
 
-  /* Pochette cliquable */
+  /* Cover header (ALWAYS VISIBLE) — enhanced for mobile + desktop */
   .cover-btn{
+    position:relative;
     display:inline-grid; place-items:center;
-    width:168px; height:168px; border-radius:14px; overflow:hidden;
+    width:168px; height:168px; border-radius:16px; overflow:hidden;
     margin:0 auto 12px; border:0; background:transparent; cursor:zoom-in;
-    box-shadow:0 8px 24px rgba(0,0,0,.25);
+    box-shadow:0 10px 28px rgba(0,0,0,.35);
+    touch-action:manipulation;
+    transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
   }
-  .cover-btn img{width:100%; height:100%; object-fit:cover; display:block;}
+  .cover-btn img{width:100%; height:100%; object-fit:cover; display:block; border-radius:16px;}
+
+  /* soft breathing halo (mobile + desktop) */
+  .cover-btn::before{
+    content:""; position:absolute; inset:0; border-radius:16px;
+    box-shadow:0 0 0 0 rgba(255,226,122,.22);
+    animation:cover-breath 3.6s ease-in-out infinite; pointer-events:none;
+  }
+  @keyframes cover-breath{
+    0%,100%{ box-shadow:0 0 0 0 rgba(255,226,122,.20); }
+    50%   { box-shadow:0 0 0 10px rgba(255,226,122,.06); }
+  }
+
+  /* tiny ↗ hint (mobile) */
+  .cover-btn::after{
+    content:"↗"; position:absolute; right:8px; bottom:8px;
+    width:22px; height:22px; display:grid; place-items:center;
+    font-size:12px; font-weight:800; color:#111;
+    background:var(--accent); border-radius:999px;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    animation:hint-bounce 2.4s ease-in-out infinite;
+    opacity:.9; pointer-events:none;
+  }
+  @keyframes hint-bounce{
+    0%,100%{ transform:translateY(0); opacity:.9; }
+    50%   { transform:translateY(-3px); opacity:.78; }
+  }
+
+  /* center hint (desktop hover only) */
+  .zoom-hint{
+    position:absolute; inset:0; display:grid; place-items:center;
+    pointer-events:none; opacity:0; transition:opacity .22s ease;
+  }
+  .zoom-hint span{
+    padding:6px 10px; border-radius:999px; background:var(--accent); color:#111;
+    font-weight:800; font-size:12px; box-shadow:0 6px 18px rgba(0,0,0,.25);
+  }
+
+  /* Desktop only hover */
+  @media (hover:hover) and (pointer:fine){
+    .cover-btn:hover{
+      transform:translateY(-2px) scale(1.01) rotateX(2deg) rotateY(1.5deg);
+      box-shadow:0 16px 40px rgba(0,0,0,.5);
+      filter:saturate(1.02);
+    }
+    .cover-btn:hover::after{ opacity:0; }
+    .cover-btn:hover .zoom-hint,
+    .cover-btn:focus-visible .zoom-hint{ opacity:.95; }
+  }
+
+  .cover-btn:focus-visible{
+    outline:2px solid var(--accent); outline-offset:8px; border-radius:18px;
+  }
 
   .title{font-weight:800; font-size:18px; margin:2px 0 0; color:#fff;}
   .subtitle{font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#e9e9e9; opacity:.95; margin-top:2px;}
   .hint{color:#eaeaea; font-size:12.5px; margin:8px 0 2px; opacity:.8}
 
-  /* === Platforms — pill grid layout (clean like the loop button) === */
-  .services{
-    display:grid; gap:10px; padding:12px;
-    grid-template-columns:1fr;
+  /* COUNTDOWN */
+  .countdown.card{ margin-top:14px; padding:14px; border-radius:18px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); }
+  .cgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .cunit{ text-align:center; padding:14px; border-radius:14px;
+    background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.12); }
+  .cnum{ font-variant-numeric:tabular-nums; font-size:34px; font-weight:900; line-height:1; color:#fff; }
+  .clab{ text-transform:uppercase; letter-spacing:.16em; font-size:11px; color:#d7d7d7; }
+  @media (max-width:560px){ .cgrid{ grid-template-columns:repeat(2,1fr); } }
+  .hidden{display:none !important;}
+
+  /* Inline mailing box */
+  .form-wrap{margin:14px 0 4px; padding:18px 20px; border-radius:18px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); text-align:center; backdrop-filter:blur(8px);}
+  .form-wrap p{font-size:14px;color:#e9e9e9;margin:0 0 12px;}
+  .form{display:flex; gap:10px; justify-content:center; align-items:flex-start}
+  .form input[type="email"]{flex:1; padding:10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.25);
+    background:rgba(0,0,0,.35); color:#fff; font-size:14px; outline:none;}
+  .form input::placeholder{color:rgba(255,255,255,.6)}
+  .form button{padding:10px 16px;border-radius:999px;border:0;background:var(--accent);color:#111;font-weight:800;cursor:pointer;}
+  @media(max-width:560px){ .form{flex-direction:column;} .form button{width:100%;} }
+
+  /* FOLLOW block */
+  .follow{margin-top:12px; padding:18px 18px 20px;}
+  .follow h3{margin:0 0 10px; color:#fff; font-size:16px; font-weight:900; text-align:center;}
+  .socials{display:flex; flex-direction:column; gap:10px;}
+  .sbtn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:12px 16px; border-radius:999px; text-decoration:none;
+    background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.35);
+    color:#fff; font-weight:900; letter-spacing:.01em; font-size:15px;
+    box-shadow:0 10px 24px rgba(0,0,0,.35);
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease;
   }
-  @media(min-width:540px){
-    .services{grid-template-columns:1fr 1fr;}
+  .sbtn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px rgba(0,0,0,.5);
+    background:rgba(255,255,255,.14);
+    border-color:rgba(255,255,255,.55);
   }
-  .svc{
-    display:flex; align-items:center; gap:12px;
-    padding:12px 14px; border-radius:999px;
-    /* un peu plus blanc pour contraster sur l'orange */
-    background:rgba(255,255,255,.96);
-    border:1px solid rgba(0,0,0,.06);
-    text-decoration:none;
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
-    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
-  }
-  .svc:hover{
-    transform:translateY(-1px);
-    box-shadow:0 10px 24px rgba(0,0,0,.10);
-    background:#fff;
-  }
+  .icon{width:22px;height:22px;flex:0 0 22px;display:inline-block}
+
+  /* Video */
+  .video{margin:16px 0 14px; border-radius:18px; overflow:hidden; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.10);}
+  .video iframe{width:100%; aspect-ratio:16/9; border:0; display:block;}
+
+  /* Services */
+  .services{display:grid; gap:10px; padding:12px; grid-template-columns:1fr;}
+  @media(min-width:540px){ .services{grid-template-columns:1fr 1fr;} }
+  .svc{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:999px; background:rgba(255,255,255,.96);
+       border:1px solid rgba(0,0,0,.06); text-decoration:none; box-shadow:0 8px 20px rgba(0,0,0,.06);}
   .svc .logo{width:26px;height:26px;object-fit:contain;flex:0 0 26px}
   .svc .name{font-weight:800;color:#111;letter-spacing:.01em}
-  .svc .go{
-    margin-left:auto; font-weight:800; font-size:12px;
-    background:var(--btn); color:var(--btnText);
-    padding:8px 12px; border-radius:999px; border:0;
-  }
-
+  .svc .go{margin-left:auto; font-weight:800; font-size:12px; background:var(--btn); color:var(--btnText); padding:8px 12px; border-radius:999px;}
   .brand{text-align:center; margin-top:18px; color:#ddd; font-size:14px; font-weight:600}
 
-  /* === Lightbox (image + text side-by-side) === */
-  .lightbox{
-    position:fixed; inset:0; display:none;
-    align-items:center; justify-content:center;
-    background:rgba(0,0,0,.68); backdrop-filter:blur(3px);
-    z-index:50;
-  }
+  /* Lightbox */
+  .lightbox{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.68); backdrop-filter:blur(3px); z-index:50;}
   .lightbox.open{display:flex}
+  .lb-content{position:relative; display:flex; gap:18px; width:min(960px,92vw); max-height:92vh; background:rgba(20,22,25,.92);
+    border:1px solid rgba(255,255,255,.08); border-radius:20px; box-shadow:0 30px 100px rgba(0,0,0,.6); padding:16px; color:#fff;}
+  .lb-img{flex:1 1 55%; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; background:rgba(255,255,255,.04);}
+  .lb-img img{width:100%; height:auto; max-height:calc(92vh - 56px); object-fit:contain; border-radius:12px;}
+  .lb-text{flex:1 1 45%; display:flex; flex-direction:column; min-width:0; padding:6px 6px 6px 2px; overflow:auto;}
+  .lb-text h3{margin:0 0 8px; font-size:20px; font-weight:900; letter-spacing:.02em;}
+  .lb-text p{margin:0 0 10px; line-height:1.55; color:#e7e7e7; font-size:14.5px;}
+  .lb-text .meta{margin-top:auto; opacity:.85; font-size:12.5px; color:#cfcfcf; border-top:1px solid rgba(255,255,255,.08); padding-top:10px;}
+  .lightbox .close{position:absolute; top:12px; right:12px; background:rgba(255,255,255,.92); color:#111; border:1px solid #e5e5e5;
+    border-radius:999px; padding:8px 10px; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.25);}
+  @media (max-width: 720px){ .lb-content{flex-direction:column; gap:12px; padding:14px;} .lb-img img{max-height:50vh;} }
 
-  .lb-content{
-    position:relative;
-    display:flex; gap:18px;
-    width:min(960px,92vw); max-height:92vh;
-    background:rgba(20,22,25,.92);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    box-shadow:0 30px 100px rgba(0,0,0,.6);
-    padding:16px;
-    color:#fff;
-  }
-  .lb-img{
-    flex:1 1 55%;
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden; border-radius:14px;
-    background:rgba(255,255,255,.04);
-  }
-  .lb-img img{
-    width:100%; height:auto; max-height:calc(92vh - 56px);
-    object-fit:contain; border-radius:12px;
-  }
-  .lb-text{
-    flex:1 1 45%;
-    display:flex; flex-direction:column;
-    min-width:0; padding:6px 6px 6px 2px; overflow:auto;
-  }
-  .lb-text h3{
-    margin:0 0 8px; font-size:20px; font-weight:900; letter-spacing:.02em;
-  }
-  .lb-text p{
-    margin:0 0 10px; line-height:1.55; color:#e7e7e7; font-size:14.5px;
-  }
-  .lb-text .meta{
-    margin-top:auto; opacity:.85; font-size:12.5px; color:#cfcfcf;
-    border-top:1px solid rgba(255,255,255,.08); padding-top:10px;
-  }
-  .lightbox .close{
-    position:absolute; top:12px; right:12px;
-    background:rgba(255,255,255,.92); color:#111; border:1px solid #e5e5e5;
-    border-radius:999px; padding:8px 10px; font-weight:700; cursor:pointer;
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-  }
-  @media (max-width: 720px){
-    .lb-content{flex-direction:column; gap:12px; padding:14px;}
-    .lb-img img{max-height:50vh;}
-  }
   @media (prefers-reduced-motion: reduce){
-    .row, .newsletter-btn{transition:none; animation:none}
+    .cover-btn, .cover-btn::before, .cover-btn::after { animation:none; transition:none; }
   }
 </style>
 </head>
 <body>
   <main class="wrap">
-    <!-- VIDEO -->
-    <section class="video" aria-label="Music Video">
-      <iframe
-        src="https://www.youtube.com/embed/9coxeNKwFvw?rel=0&modestbranding=1"
-        title="Malïao — FRIDAY"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
-    </section>
 
-    <!-- === Newsletter trigger placed right under the video === -->
-    <button id="openNewsletter" class="newsletter-btn" aria-label="Open newsletter signup">
-      Stay in the loop
-    </button>
-
-    <!-- === Floating Modal === -->
-    <div class="newsletter-modal" id="newsletterModal" aria-hidden="true" role="dialog">
-      <div class="newsletter-box">
-        <button class="close-modal" id="closeNewsletter" aria-label="Close">×</button>
-        <h2 class="fade-in">Stay in the loop 💛</h2>
-        <p class="fade-in-delay">I’ll email you when new stuff drops.</p>
-
-        <form id="mailForm"
-          action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfY-uGloqACsaDQ4FrtxFkbmlqpo6cumsQ4nCwrQ1dUEt6Xsw/formResponse"
-          method="POST">
-          <!-- Make sure entry.* matches your Google Forms field -->
-          <input type="email" name="entry.649502797" placeholder="Your email" required>
-          <button type="submit">Join the list</button>
-        </form>
-
-        <div class="thank" aria-live="polite">Thank you! You’re on the list 💛</div>
-      </div>
-    </div>
-    <!-- === End Modal === -->
-
-    <!-- CARD -->
-    <section class="card" aria-label="Choisir un service musical">
+    <!-- ===== TOP CARD: cover + title (ALWAYS visible & clickable) ===== -->
+    <section class="card" aria-label="Hero">
       <div class="card-header">
-        <!-- Pochette cliquable -->
         <button class="cover-btn" id="openCover" aria-label="Agrandir la pochette" title="Agrandir">
           <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png" alt="Pochette du single" loading="lazy">
+          <div class="zoom-hint"><span>Tap to open</span></div>
         </button>
-
         <div class="title">Malïao</div>
-        <div class="subtitle">NEW SINGLE</div>
-        <div class="hint">Choose music service</div>
-      </div>
-
-      <!-- Redesigned services grid -->
-      <div class="services" aria-label="Services">
-        <a class="svc" href="https://bit.ly/maliao_youtubemusic" target="_blank" rel="noopener">
-          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Youtubemusic.png" alt="">
-          <div class="name">YouTube Music</div>
-          <span class="go">Listen</span>
-        </a>
-
-        <a class="svc" href="https://bit.ly/maliao_spotify" target="_blank" rel="noopener">
-          <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="">
-          <div class="name">Spotify</div>
-          <span class="go">Listen</span>
-        </a>
-
-        <a class="svc" href="https://bit.ly/maliao_apple" target="_blank" rel="noopener">
-          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Apple.jpeg" alt="">
-          <div class="name">Apple Music</div>
-          <span class="go">Listen</span>
-        </a>
-
-        <a class="svc" href="https://bit.ly/maliao_deezer" target="_blank" rel="noopener">
-          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Deezer.jpeg" alt="">
-          <div class="name">Deezer</div>
-          <span class="go">Listen</span>
-        </a>
-
-        <a class="svc" href="https://bit.ly/maliao_tidal" target="_blank" rel="noopener">
-          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Tidal.png" alt="">
-          <div class="name">TIDAL</div>
-          <span class="go">Listen</span>
-        </a>
-
-        <a class="svc" href="https://bit.ly/maliao_amazon" target="_blank" rel="noopener">
-          <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/ama.png" alt="">
-          <div class="name">Amazon Music</div>
-          <span class="go">Listen</span>
-        </a>
+        <div class="subtitle">FRIDAY</div>
+        <div class="hint">Out soon. In the meantime, tap the cover to learn more</div>
       </div>
     </section>
+
+    <!-- ===== COUNTDOWN (visible before release) ===== -->
+    <section id="countdownBlock" class="countdown card" aria-label="Countdown">
+      <div class="cgrid">
+        <div class="cunit"><div id="cd" class="cnum">00</div><div class="clab">Days</div></div>
+        <div class="cunit"><div id="ch" class="cnum">00</div><div class="clab">Hours</div></div>
+        <div class="cunit"><div id="cm" class="cnum">00</div><div class="clab">Minutes</div></div>
+        <div class="cunit"><div id="cs" class="cnum">00</div><div class="clab">Seconds</div></div>
+      </div>
+    </section>
+
+    <!-- ===== INLINE MAILING LIST (always visible) ===== -->
+    <section class="form-wrap card" aria-label="Join the list">
+      <p>Be the first to hear when it drops - join the list 👇</p>
+      <form id="joinForm" class="form"
+        action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfY-uGloqACsaDQ4FrtxFkbmlqpo6cumsQ4nCwrQ1dUEt6Xsw/formResponse"
+        method="POST" novalidate>
+        <input id="email" type="email" name="entry.649502797" placeholder="Enter your email" required>
+        <button id="submitBtn" type="submit">Notify Me</button>
+      </form>
+      <div id="email-error" style="color:#ff8a8a;font-size:12px;margin-top:8px;min-height:16px;"></div>
+    </section>
+
+    <!-- ===== FOLLOW / SUBSCRIBE (new block) ===== -->
+    <section class="card follow" aria-label="Follow Malïao">
+      <h3>Follow / Subscribe</h3>
+      <div class="socials">
+        <!-- YouTube with subscribe prompt -->
+        <a class="sbtn" href="https://www.youtube.com/@maliao_with2dots?sub_confirmation=1" target="_blank" rel="noopener" aria-label="Subscribe on YouTube">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="1.5" y="4" width="21" height="16" rx="4" fill="#FF0000"/>
+            <polygon points="10,8 17,12 10,16" fill="#FFFFFF"/>
+          </svg>
+          <span>Subscribe on YouTube</span>
+        </a>
+        <!-- Instagram -->
+        <a class="sbtn" href="https://www.instagram.com/maliao_with2dots/" target="_blank" rel="noopener" aria-label="Follow on Instagram">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.3" fill="#FFFFFF"/>
+          </svg>
+          <span>Follow on Instagram</span>
+        </a>
+   
+	    <!-- TikTok -->
+    <a class="sbtn" href="https://www.tiktok.com/@maliao_with2dots?_t=ZN-90sDvzCYvI6&_r=1"
+       target="_blank" rel="noopener" aria-label="Follow on TikTok">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#FFFFFF"
+          d="M17.5 6.9a5.9 5.9 0 0 1-3.2-2.9V4h-3.1v10.1a2.7 2.7 0 1 1-2.7-2.7 2.7 2.7 0 0 1 .7.1V8.3a6 6 0 1 0 6 6V9.7a9 9 0 0 0 2.3.3V6.9z"/>
+      </svg>
+      <span>Follow on TikTok</span>
+    </a>
+
+   </div>
+    </section>
+    <!-- ===== RELEASE CONTENT (hidden before release) ===== -->
+    <div id="releaseBlock" class="hidden">
+      <!-- Video -->
+      <section class="video" aria-label="Music Video">
+        <iframe id="yt" title="Malïao — FRIDAY"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </section>
+
+      <!-- Services -->
+      <section class="card" aria-label="Choisir un service musical">
+        <div class="services" aria-label="Services">
+          <a class="svc" href="https://bit.ly/maliao_youtubemusic" target="_blank" rel="noopener">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Youtubemusic.png" alt="">
+            <div class="name">YouTube Music</div>
+            <span class="go">Listen</span>
+          </a>
+          <a class="svc" href="https://bit.ly/maliao_spotify" target="_blank" rel="noopener">
+            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="">
+            <div class="name">Spotify</div>
+            <span class="go">Listen</span>
+          </a>
+          <a class="svc" href="https://bit.ly/maliao_apple" target="_blank" rel="noopener">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Apple.jpeg" alt="">
+            <div class="name">Apple Music</div>
+            <span class="go">Listen</span>
+          </a>
+          <a class="svc" href="https://bit.ly/maliao_deezer" target="_blank" rel="noopener">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Deezer.jpeg" alt="">
+            <div class="name">Deezer</div>
+            <span class="go">Listen</span>
+          </a>
+          <a class="svc" href="https://bit.ly/maliao_tidal" target="_blank" rel="noopener">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Tidal.png" alt="">
+            <div class="name">TIDAL</div>
+            <span class="go">Listen</span>
+          </a>
+          <a class="svc" href="https://bit.ly/maliao_amazon" target="_blank" rel="noopener">
+            <img class="logo" src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/ama.png" alt="">
+            <div class="name">Amazon Music</div>
+            <span class="go">Listen</span>
+          </a>
+        </div>
+      </section>
+    </div>
 
     <div class="brand">© <span id="y"></span> MALÏAO & HOMEMAD. PROD</div>
   </main>
 
-  <!-- Lightbox (side-by-side cover + text) -->
+  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Pochette agrandie">
     <div class="lb-content" role="document">
       <button class="close" id="closeLb" aria-label="Fermer (Esc)">×</button>
-
-      <!-- LEFT: Album cover -->
       <div class="lb-img">
-        <img
-          src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png"
-          alt="Pochette du single agrandie">
+        <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/Maliao/refs/heads/main/Cover%20V7.png" alt="Pochette du single agrandie">
       </div>
-
-      <!-- RIGHT: Album text -->
-<aside class="lb-text">
-  <h3>About FRIDAY</h3>
-  <p>
-    <strong>FRIDAY</strong> is a song I wrote the lyrics for while recording it. 
-    It didn’t make much sense at the time, but it’s taken its own shape now      and I like it.
-  </p>
-  <p>
-   For the beat, I sampled an old song I made back when I was living in Beijing.
-I was renting a room in an apartment on the 20th floor of a building,
-with a huge circular window. My desk was right in the middle of it,
-and I could see far   but there was nothing to look at except the stillness of a city of twenty million people under lockdown.
-  </p>
-
-  <!-- Image below text -->
-  <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Beijingstudio.png" alt="Beijing Studio circular window" class="about-img">
-
-  <div class="meta">
-    Written by Malïao & produced by HOMEMAD. PROD · Recorded between Beijing & Paris · 2018/2025
+      <aside class="lb-text">
+        <h3>About FRIDAY</h3>
+        <p><strong>FRIDAY</strong> is a song I wrote the lyrics for while recording it. So it came out as honestly and genuinely as it came to me at the time.</p>
+        <p>For the beat, I sampled an old song I made back when I was living in Beijing during lockdown. In a room on the 20th floor with a huge circular window, with a view of a highway and other buildings, surrounded by millions, but all in our boxes, paranoid of each other.</p>
+        <p>I must say, it was great for introspection, video games and music.</p>
+        <p>I hope you'll enjoy it.</p>
+        <img src="https://raw.githubusercontent.com/maliaowith2dots-tech/FRIDAY/refs/heads/main/Beijingstudio.png" alt="Beijing Studio circular window" class="about-img">
+        <div class="meta">Written by Malïao & produced by HOMEMAD. PROD · Recorded between Beijing & Paris · 2018/2025</div>
+      </aside>
+    </div>
   </div>
-</aside>
 
 <script>
-  // Année auto
+  // Footer year
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // Lightbox logique
+  // Lightbox
   const openBtn = document.getElementById('openCover');
   const lb = document.getElementById('lightbox');
   const closeBtn = document.getElementById('closeLb');
-
-  function openLightbox(){
-    lb.classList.add('open');
-    lb.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden';
-    setTimeout(()=>closeBtn.focus(), 0);
-  }
-  function closeLightbox(){
-    lb.classList.remove('open');
-    lb.setAttribute('aria-hidden','true');
-    document.body.style.overflow = '';
-    openBtn.focus();
-  }
-  openBtn.addEventListener('click', openLightbox);
+  function openLightbox(){ lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; setTimeout(()=>closeBtn.focus(),0); }
+  function closeLightbox(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; openBtn && openBtn.focus(); }
+  openBtn && openBtn.addEventListener('click', openLightbox);
   closeBtn.addEventListener('click', closeLightbox);
-  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
-  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
+  lb.addEventListener('click', e=>{ if(e.target===lb) closeLightbox(); });
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLightbox(); });
 
-  // === Newsletter modal logic ===
-  const modal=document.getElementById("newsletterModal");
-  const openNewsletter=document.getElementById("openNewsletter");
-  const closeNewsletter=document.getElementById("closeNewsletter");
-
-  openNewsletter.addEventListener("click",()=>{ 
-    modal.classList.add("open"); 
-    modal.setAttribute("aria-hidden","false"); 
-  });
-  closeNewsletter.addEventListener("click",()=>{ 
-    modal.classList.remove("open"); 
-    modal.setAttribute("aria-hidden","true"); 
-  });
-  modal.addEventListener("click",e=>{ 
-    if(e.target===modal) { 
-      modal.classList.remove("open"); 
-      modal.setAttribute("aria-hidden","true");
-    }
-  });
-
-  // === Email submit (Google Forms, no page change) ===
-  const form=document.getElementById("mailForm");
-  const box=document.querySelector(".newsletter-box");
-  form.addEventListener("submit",async e=>{
+  // Inline mailing form (Google Forms POST, no redirect)
+  const jf = document.getElementById('joinForm');
+  const email = document.getElementById('email');
+  const err = document.getElementById('email-error');
+  const submitBtn = document.getElementById('submitBtn');
+  function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v || ""); }
+  jf.addEventListener('submit', async e=>{
     e.preventDefault();
-    const data=new FormData(form);
+    const v = (email.value || '').trim();
+    if(!isValidEmail(v)){ err.textContent='Invalid email address. Example: name@example.com'; email.focus(); return; }
+    submitBtn.disabled = true; submitBtn.textContent = 'Sending…';
     try{
-      await fetch(form.action,{method:"POST",body:data,mode:"no-cors"});
-      box.classList.add("sent");
-    }catch(err){
-      box.classList.add("sent");
-      box.querySelector(".thank").textContent="Error — try again later.";
+      const fd = new FormData(); fd.append('entry.649502797', v);
+      await fetch(jf.action, {method:'POST', mode:'no-cors', body:fd});
+      err.style.color = '#9be37a'; err.textContent = 'You’re in. Thank you! 💛';
+      jf.reset();
+    }catch(_){
+      err.style.color = '#ff8a8a'; err.textContent = 'Could not send. Try again in a moment.';
+    }finally{
+      submitBtn.disabled = false; submitBtn.textContent = 'Notify Me';
     }
   });
+
+  // Countdown → Release flip (services + video appear after drop)
+  const targetTs = new Date(RELEASE_DATE).getTime();
+  const elCD = document.getElementById('countdownBlock');
+  const elRB = document.getElementById('releaseBlock');
+
+  function showReleased(){
+    elCD.classList.add('hidden');
+    elRB.classList.remove('hidden');
+    const yt = document.getElementById('yt');
+    if(yt && !yt.src){
+      yt.src = `https://www.youtube-nocookie.com/embed/${YT_ID}?rel=0&modestbranding=1`;
+      setTimeout(() => {
+        try {
+          if (!yt.contentWindow) {
+            const wrap = yt.parentElement;
+            const a = document.createElement('a');
+            a.href = `https://www.youtube.com/watch?v=${YT_ID}`;
+            a.target = "_blank"; a.rel = "noopener"; a.style.display = "block"; a.style.borderRadius = "14px"; a.style.overflow = "hidden";
+            const holder = document.createElement('div'); holder.style.position = "relative";
+            const img = document.createElement('img'); img.src = `https://img.youtube.com/vi/${YT_ID}/hqdefault.jpg`; img.alt="Watch on YouTube"; img.style.width="100%"; img.style.display="block";
+            const badge = document.createElement('div'); badge.textContent="Watch on YouTube";
+            Object.assign(badge.style,{position:"absolute",bottom:"10px",right:"10px",padding:"8px 12px",borderRadius:"999px",background:"rgba(255,255,255,.9)",color:"#111",fontWeight:"800",fontSize:"12px"});
+            holder.appendChild(img); holder.appendChild(badge);
+            wrap.replaceChild(a, yt); a.appendChild(holder);
+          }
+        } catch (e) {/* noop */}
+      }, 1200);
+    }
+  }
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    const diff = targetTs - Date.now();
+    if(diff <= 0){ showReleased(); return; }
+    const s = Math.floor(diff/1000);
+    const d = Math.floor(s/86400), h = Math.floor((s%86400)/3600), m = Math.floor((s%3600)/60), ss = s%60;
+    document.getElementById('cd').textContent = pad(d);
+    document.getElementById('ch').textContent = pad(h);
+    document.getElementById('cm').textContent = pad(m);
+    document.getElementById('cs').textContent = pad(ss);
+  }
+  tick();
+  if(Date.now() < targetTs){
+    const t = setInterval(()=>{ tick(); if(Date.now() >= targetTs){ clearInterval(t); showReleased(); } }, 1000);
+  } else { showReleased(); }
 </script>
 </body>
 </html>
-
-
-
-
