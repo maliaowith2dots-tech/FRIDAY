@@ -8,9 +8,12 @@
 
 <!-- CONFIG -->
 <script>
-  // Test 5s (replace with ISO like "2025-11-07T00:00:00+01:00" for real)
+  // Date de sortie
   const RELEASE_DATE = "2025-11-07T00:00:00+01:00";
+  // Clip officiel (post-release)
   const YT_ID = "9coxeNKwFvw";
+  // Trailer (pré-release)
+  const TRAILER_ID = "yJFd0rigpbA";
 
   // Banner texts
   const ANNOUNCE_TEXT = "FRIDAY will be out on 7 Nov 2025 — join the list so you don’t miss it.";
@@ -77,7 +80,7 @@
   .zoom-hint{position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; opacity:0; transition:opacity .22s ease;}
   .zoom-hint span{padding:6px 10px; border-radius:999px; background:var(--accent); color:#111; font-weight:800; font-size:12px; box-shadow:0 6px 18px rgba(0,0,0,.25);}
 
-  @media (hover:hover) and (pointer:fine){
+  @media (hover:hover) and (pointer:fine)){
     .cover-btn:hover{transform:translateY(-2px) scale(1.01) rotateX(2deg) rotateY(1.5deg); box-shadow:0 16px 40px rgba(0,0,0,.5); filter:saturate(1.02);}
     .cover-btn:hover::after{opacity:0;}
     .cover-btn:hover .zoom-hint, .cover-btn:focus-visible .zoom-hint{opacity:.95;}
@@ -219,6 +222,18 @@
       </div>
     </section>
 
+    <!-- ===== TRAILER (visible avant la sortie) ===== -->
+    <section id="trailerBlock" class="video" aria-label="Trailer">
+      <iframe
+        id="trailerYt"
+        title="Malïao — FRIDAY (Trailer)"
+        src=""
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </section>
+
     <!-- ===== COUNTDOWN ===== -->
     <section id="countdownBlock" class="countdown card" aria-label="Countdown">
       <div class="cgrid">
@@ -330,14 +345,32 @@
   const elAnnounce = document.getElementById('announceBlock');
   const elAnnounceText = document.getElementById('announceText');
 
+  // Trailer elements
+  const trailerSection = document.getElementById('trailerBlock');
+  const trailerIframe = document.getElementById('trailerYt');
+
   if (elAnnounceText) elAnnounceText.textContent = ANNOUNCE_TEXT;
+
+  // Lazy set trailer src only if pre-release
+  if (Date.now() < targetTs && trailerIframe) {
+    trailerIframe.src = `https://www.youtube-nocookie.com/embed/${TRAILER_ID}?rel=0&modestbranding=1`;
+  } else if (trailerSection) {
+    trailerSection.classList.add('hidden');
+  }
 
   function showReleased(){
     if (elAnnounceText) elAnnounceText.textContent = WELCOME_TEXT;
 
     if (elAnnounce && elRB) elAnnounce.insertAdjacentElement('afterend', elRB);
 
+    // Hide countdown
     elCD.classList.add('hidden');
+
+    // Stop & hide trailer
+    if (trailerIframe) { trailerIframe.src = ""; }
+    if (trailerSection) { trailerSection.classList.add('hidden'); }
+
+    // Show release block (clip officiel)
     elRB.classList.remove('hidden');
 
     const yt = document.getElementById('yt');
